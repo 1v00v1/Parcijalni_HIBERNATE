@@ -1,0 +1,14 @@
+
+<hibernate-configuration>
+    <session-factory>
+        <!--    <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>-->
+        <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+        <property name="hibernate.connection.url">jdbc:sqlserver://;serverName=localhost;databaseName=HibernateTest;encrypt=true;trustServerCertificate=true;</property>
+        <property name="hibernate.connection.username">sa</property>
+        <property name="hibernate.connection.password">SQL</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <mapping class="model.Drzava"/>
+    </session-factory>
+</hibernate-configuration>
