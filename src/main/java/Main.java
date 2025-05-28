@@ -1,3 +1,4 @@
+import jakarta.persistence.Query;
 import model.Polaznik;
 import model.ProgramObrazovanja;
 import org.hibernate.Session;
@@ -10,10 +11,12 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 Scanner sc = new Scanner(System.in);
-unosPolaznika(sc);
-unosPO(sc);
-upisPolaznikaNaPO(sc);
-izmjenaPO(sc);
+//unosPolaznika(sc);
+//unosPO(sc);
+//upisPolaznikaNaPO(sc);
+//izmjenaPO(sc);
+
+        ispisPolaznikaIPO(sc);
     }
 
     private static void unosPolaznika(Scanner sc){
@@ -30,6 +33,36 @@ izmjenaPO(sc);
 
         }
 
+    }
+    private static void ispisPolaznikaIPO(Scanner sc){
+
+        String hql = "SELECT p.ime, p.prezime, po.naziv, po.csvet " +
+                "FROM Polaznik p " +
+                "JOIN p.programObrazovanja po " +
+                "WHERE p.id = :polaznikId";
+
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            Transaction transaction = session.beginTransaction();
+            List<Polaznik> polaznici = session.createQuery("from Polaznik").list();
+            for (Polaznik p : polaznici) {
+                System.out.println(p.getId()+" "+ p.getIme() + " " + p.getPrezime());
+            }
+            System.out.print("Izaberite polaznika po ID-u:");
+            int id = Integer.parseInt(sc.nextLine());
+            List<Object[]> results = session.createQuery(hql, Object[].class)
+                    .setParameter("polaznikId", id)
+                    .list();
+
+            for (Object[] result : results) {
+                System.out.printf("Ime: %s, Prezime: %s, Program: %s, CSVET: %s%n",
+                        result[0], result[1], result[2], result[3]);
+            }
+
+
+
+            transaction.commit();
+        }
     }
     private static void unosPO(Scanner sc){
         System.out.print("Unesite naziv Programa Obrazovanja: ");
